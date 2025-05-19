@@ -5,8 +5,8 @@ from src.crypto.encrypt import rsa_encrypt
 from src.crypto.decrypt import rsa_decrypt
 from src.stego.embed import embed_dwt
 from src.stego.extract import extract_dwt
-from src.stego_audio.embed_audio import embed_dwt_audio
-from src.stego_audio.extract_audio import extract_dwt_audio
+from src.stego_audio.embed_audio import embed_lsb_audio
+from src.stego_audio.extract_audio import extract_lsb_audio
 
 def is_audio(file_path):
     return file_path.lower().endswith('.wav')
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     # 4. Embed ciphertext
     if is_audio(cover_path):
-        embed_dwt_audio(cover_path, ciphertext, stego_path)
+        embed_lsb_audio(cover_path, ciphertext, stego_path)
         print("Stego audio saved to:", stego_path)
     else:
         embed_dwt(cover_path, ciphertext, stego_path)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # 5. Extract & decrypt
     if is_audio(cover_path):
-        extracted = extract_dwt_audio(stego_path, len(ciphertext))
+        extracted = extract_lsb_audio(stego_path, len(ciphertext))
     else:
         extracted = extract_dwt(stego_path, len(ciphertext))
 
