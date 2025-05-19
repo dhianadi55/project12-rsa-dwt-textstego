@@ -5,8 +5,8 @@ from src.crypto.encrypt import rsa_encrypt
 from src.crypto.decrypt import rsa_decrypt
 from src.stego.embed import embed_dwt
 from src.stego.extract import extract_dwt
-from src.stego_audio.embed_audio import embed_lsb_audio
-from src.stego_audio.extract_audio import extract_lsb_audio
+from src.stego_audio.embed_lsb_audio import embed_lsb_audio
+from src.stego_audio.extract_lsb_audio import extract_lsb_audio
 
 def is_audio(file_path):
     return file_path.lower().endswith('.wav')
