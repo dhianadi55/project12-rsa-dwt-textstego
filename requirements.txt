@@ -37,10 +37,10 @@ pytz==2025.2
 PyWavelets==1.8.0
 pywin32==310
 pyzmq==26.4.0
-# Editable install with no version control (rsa_dwt_project==0.1)
--e d:\vscode\cryptography\project
+-e git+https://github.com/dhianadi55/project12-rsa-dwt-textstego.git@4e9bc45c0fd889c5d19ca08d774808133ff70133#egg=rsa_dwt_project
 scikit-image==0.25.2
 scipy==1.15.3
+setuptools==80.8.0
 six==1.17.0
 stack-data==0.6.3
 tifffile==2025.5.10

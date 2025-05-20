@@ -1,12 +1,9 @@
-# main.py
 import os
 from src.crypto.keygen import generate_rsa_keys
 from src.crypto.encrypt import rsa_encrypt
 from src.crypto.decrypt import rsa_decrypt
-from src.stego.embed import embed_dwt
-from src.stego.extract import extract_dwt
-from src.stego_audio.embed_audio import embed_dwt_audio
-from src.stego_audio.extract_audio import extract_dwt_audio
+from src.stego_audio.embed_dct_audio import embed_dct_audio
+from src.stego_audio.extract_dct_audio import extract_dct_audio
 
 def is_audio(file_path):
     return file_path.lower().endswith('.wav')
@@ -18,33 +15,28 @@ if __name__ == "__main__":
     print(f"Keys generated: {priv_path}, {pub_path}")
 
     # 2. Encrypt message
-    message = b"Ini pesan rahasia dengan cover image atau audio"
+    message = b"Test"
     ciphertext = rsa_encrypt(message, pub_path)
     print("Ciphertext length:", len(ciphertext))
 
-    # 3. Choose cover file (image or audio)
-    cover_path = 'data/cover/cover1.jpg'  # ganti ke .wav untuk audio
-    cover_path = 'data/cover/cover1.wav'  # ganti ke .wav untuk audio
-    stego_path = 'data/stego/stego1' + ('.wav' if is_audio(cover_path) else '.png')
+    # 3. Choose cover file (audio)
+    cover_path = 'data/cover/cover1.wav'
+    stego_path = 'data/stego/stego1.wav'
 
     # 4. Embed ciphertext
-    if is_audio(cover_path):
-        embed_dwt_audio(cover_path, ciphertext, stego_path)
-        print("Stego audio saved to:", stego_path)
-    else:
-        embed_dwt(cover_path, ciphertext, stego_path)
-        print("Stego image saved to:", stego_path)
+    embed_dct_audio(cover_path, ciphertext, stego_path, block_size=1024, bits_per_block=4)
+    print("Stego audio saved to:", stego_path)
 
     # 5. Extract & decrypt
-    if is_audio(cover_path):
-        extracted = extract_dwt_audio(stego_path, len(ciphertext))
-    else:
-        extracted = extract_dwt(stego_path, len(ciphertext))
-
+    extracted = extract_dct_audio(stego_path, len(ciphertext), block_size=1024, bits_per_block=4)
     # Debug: bandingkan ciphertext asli dan hasil ekstraksi
     print("Ciphertext asli     :", ciphertext.hex())
     print("Ciphertext ekstraksi:", extracted.hex())
     print("Sama?", ciphertext == extracted)
+    for i, (a, b) in enumerate(zip(ciphertext, extracted)):
+        if a != b:
+            print(f"Byte ke-{i}: asli={a:02x}, ekstrak={b:02x}")
+            break
 
     recovered = rsa_decrypt(extracted, priv_path)
     print("Recovered message:", recovered.decode())
