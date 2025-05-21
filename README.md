@@ -100,4 +100,3 @@ Berikut adalah langkah-langkah untuk menjalankan aplikasi ini, tergantung pada p
     Setelah virtual environment aktif dan dependensi terinstal, jalankan aplikasi utama:
     ```bash
     python main.py
-    ```#
